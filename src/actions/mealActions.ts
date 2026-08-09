@@ -8,7 +8,8 @@ import path from "path";
 export async function getMeals() {
     try {
         return await prisma.meal.findMany({
-            include: { images: true }
+            include: { images: true },
+            orderBy: { createdAt: 'desc' }
         })
     } catch (error) {
         console.error("Error fetching meals:", error);
@@ -48,5 +49,17 @@ export async function createMeal(formData: FormData) {
     } catch (error) {
         console.error("Error creating meal:", error);
         throw new Error("Failed to create meal");
+    }
+}
+
+export async function deleteMeal(mealId: number) {
+    try {
+        await prisma.meal.delete({
+            where: { id: mealId }
+        })
+        revalidatePath("/");
+    } catch (error) {
+        console.error("Error deleting meal:", error);
+        throw new Error("Failed to delete meal");
     }
 }
