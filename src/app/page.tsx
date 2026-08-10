@@ -3,6 +3,8 @@ import MealList from "../components/MealList";
 import MealForm from "../components/MealForm";
 import { NotebookPen } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const meals = await getMeals();
 
