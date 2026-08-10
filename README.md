@@ -1,5 +1,7 @@
 # Memoreat
 
+[ [日本語ドキュメント](README.ja.md) ]
+
 Memoreat is a containerized food-logging application designed to track meals, calories, and nutritional information as easy as how you write in a diary. It is packaged with its PostgreSQL database using Docker, demonstrating modern full-stack application containerization.
 
 ## Features
