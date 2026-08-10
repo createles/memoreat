@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Memoreat
+
+Memoreat is a containerized food-logging application designed to track meals, calories, and nutritional information as easy as how you write in a diary. It is packaged with its PostgreSQL database using Docker, demonstrating modern full-stack application containerization.
+
+## Features
+
+- **Meal Logging**: Record food name, calories, macros, and personal reflections.
+- **Dashboard**: Visual summary of your nutritional intake.
+- **History**: View past meal logs and memories.
+
+## Technology Stack
+
+- **Frontend/Backend**: Next.js (App Router, Server Actions)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL with Prisma ORM
+- **Containerization**: Docker (multi-stage build), Docker Compose
+
+## Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) installed.
+- [Docker Compose](https://docs.docker.com/compose/install/) installed.
 
 ## Getting Started
 
-First, run the development server:
-
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <your-repo-url>
+cd memoreat
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment Variables
+Create a `.env` file in the root directory and add the necessary variables:
+```env
+POSTGRES_USER=myuser
+POSTGRES_PASSWORD=mypassword
+POSTGRES_DB=memoreatdb
+DATABASE_URL="postgresql://myuser:mypassword@db:5432/memoreatdb?schema=public"
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Local Development
+To run the app in development mode with hot-reloading:
+```bash
+docker-compose up
+```
+The application will be accessible at [http://localhost:3000](http://localhost:3000).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Production Deployment
+To build and run the optimized production container:
+```bash
+docker-compose -f docker-compose.prod.yml up --build -d
+```
+This utilizes a multi-stage Dockerfile to minimize image size and starts the services in the background.
 
-## Learn More
+## Database Management
+Data is persisted in a Docker volume (`postgres-data`). If you need to reset the database:
+```bash
+docker-compose down -v
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## CI/CD
+This project uses GitHub Actions to automatically build and push the Docker image to a registry upon merging into the main branch.
