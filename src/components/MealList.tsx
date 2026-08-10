@@ -46,8 +46,13 @@ export default function MealList({ meals }: MealListProps) {
                                 whileHover={{ scale: 1.02, rotate: 0, y: -10, transition: { duration: 0.2 } }}
                             >
                                 {meal.images && meal.images.length > 0 ? (
-                                    <div className="w-full aspect-square overflow-hidden bg-slate-100 mb-4 border border-slate-200">
+                                    <div className="w-full aspect-square overflow-hidden bg-slate-100 mb-4 border border-slate-200 relative">
                                         <img src={meal.images[0].url} alt={meal.name} className="w-full h-full object-cover" />
+                                        {meal.images[0].attribution && (
+                                            <div className="absolute bottom-1 right-2 text-[10px] text-white/80 bg-black/40 px-1.5 py-0.5 rounded pointer-events-none">
+                                                {meal.images[0].attribution}
+                                            </div>
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="w-full aspect-square bg-slate-100 mb-4 border border-slate-200 flex flex-col items-center justify-center">
@@ -110,8 +115,13 @@ export default function MealList({ meals }: MealListProps) {
                                 </button>
                                 
                                 {meal.images && meal.images.length > 0 ? (
-                                    <div className="w-full aspect-square overflow-hidden bg-slate-100 mb-6 border border-slate-200">
+                                    <div className="w-full aspect-square overflow-hidden bg-slate-100 mb-6 border border-slate-200 relative">
                                         <img src={meal.images[0].url} alt={meal.name} className="w-full h-full object-cover" />
+                                        {meal.images[0].attribution && (
+                                            <div className="absolute bottom-1 right-2 text-[10px] text-white/80 bg-black/40 px-1.5 py-0.5 rounded pointer-events-none">
+                                                {meal.images[0].attribution}
+                                            </div>
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="w-full aspect-square bg-slate-100 mb-6 border border-slate-200 flex flex-col items-center justify-center">

@@ -28,6 +28,7 @@ model Meal {
 model Image {
   id Int @id @default(autoincrement())
   url String // Image file url or path
+  attribution String? // Credit line for the image
   meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
   mealId Int
   createdAt DateTime @default(now())
