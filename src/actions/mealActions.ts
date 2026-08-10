@@ -63,3 +63,41 @@ export async function deleteMeal(mealId: number) {
         throw new Error("Failed to delete meal");
     }
 }
+
+export async function updateMeal(mealId: number, formData: FormData) {
+    const image = formData.get("image") as File | null;
+    let imageUrl = null;
+
+    // Handle image uploads if provided
+    if (image && image.size > 0) {
+        const buffer = Buffer.from(await image.arrayBuffer());
+        const filename = `${Date.now()}-${image.name}`;
+        const filepath = path.join(process.cwd(), "public/uploads", filename);
+        await writeFile(filepath, buffer);
+        imageUrl = `/uploads/${filename}`;
+    }
+
+    try {
+        await prisma.meal.update({
+            where: { id: mealId },
+            data: {
+                name: formData.get("name") as string,
+                calories: Number(formData.get("calories")),
+                protein: Number(formData.get("protein")),
+                carbs: Number(formData.get("carbs")),
+                fat: Number(formData.get("fat")),
+                note: formData.get("note") as string,
+                ...(imageUrl && {
+                    images: {
+                        deleteMany: {},
+                        create: { url: imageUrl }
+                    }
+                })
+            },
+        })
+        revalidatePath("/");
+    } catch (error) {
+        console.error("Error updating meal:", error);
+        throw new Error("Failed to update meal");   
+    }
+}
