@@ -1,6 +1,7 @@
 import { getMeals } from "../actions/mealActions";
 import MealList from "../components/MealList";
 import MealForm from "../components/MealForm";
+import { NotebookPen } from "lucide-react";
 
 export default async function HomePage() {
   const meals = await getMeals();
@@ -10,7 +11,10 @@ export default async function HomePage() {
       <nav className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#fdfcf8]/80 border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold tracking-tight text-slate-800">
-            Memoreat
+            <div className="flex items-center">
+              Memoreat 
+              <NotebookPen className="ml-2" />
+            </div>
           </h1>
           <p className="text-sm font-medium text-slate-500">My Food Scrapbook</p>
         </div>
