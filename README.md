@@ -10,14 +10,14 @@ Memoreat is a containerized food-logging application designed to track meals, ca
 
 ### Desktop View
 <p align="center">
-  <video src="./public/memoreat-dashboard.mp4" width="49%" autoplay loop muted playsinline></video>
-  <video src="./public/memoreat-add.mp4" width="49%" autoplay loop muted playsinline></video>
+  <video src="https://github.com/user-attachments/assets/e25ae15d-d274-42eb-9cd9-08b413e7cbb5" width="49%" autoplay loop muted playsinline></video>
+  <video src="https://github.com/user-attachments/assets/cb429244-a1a4-4c19-835a-35a15cf73d11" width="49%" autoplay loop muted playsinline></video>
 </p>
 
 ### Mobile View
 <p align="center">
-  <video src="./public/memoreat-mobile-dash.mp4" width="24%" autoplay loop muted playsinline></video>
-  <video src="./public/memoreat-mobile-add.mp4" width="24%" autoplay loop muted playsinline></video>
+  <video src="https://github.com/user-attachments/assets/f5977871-777a-4e6b-942a-c1a8123484fa" width="24%" autoplay loop muted playsinline></video>
+  <video src="https://github.com/user-attachments/assets/f9ebaa3b-cb9d-41b2-96c9-14593e33b00b" width="24%" autoplay loop muted playsinline></video>
 </p>
 
 ## Build Rationale
