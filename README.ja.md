@@ -6,7 +6,7 @@ Memoreatは、食事の記録、カロリー、栄養情報をトラッキング
 
 ## ライブデモ
 
-[Railwayでのライブデモを見る](https://your-project-name.up.railway.app)
+[Railwayでのライブデモを見る](https://memoreat-production.up.railway.app/)
 
 ### デスクトップ表示
 <p align="center">

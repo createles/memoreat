@@ -6,7 +6,7 @@ Memoreat is a containerized food-logging application designed to track meals, ca
 
 ## Live Demo
 
-[View Live on Railway](https://your-project-name.up.railway.app)
+[View Live on Railway](https://memoreat-production.up.railway.app/)
 
 ### Desktop View
 <p align="center">
