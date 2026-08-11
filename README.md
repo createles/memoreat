@@ -4,6 +4,29 @@
 
 Memoreat is a containerized food-logging application designed to track meals, calories, and nutritional information as easy as how you write in a diary. It is packaged with its PostgreSQL database using Docker, demonstrating modern full-stack application containerization.
 
+## Live Demo
+
+[View Live on Railway](https://your-project-name.up.railway.app)
+
+### Desktop View
+<p align="center">
+  <video src="./public/memoreat-dashboard.mp4" width="49%" autoplay loop muted playsinline></video>
+  <video src="./public/memoreat-add.mp4" width="49%" autoplay loop muted playsinline></video>
+</p>
+
+### Mobile View
+<p align="center">
+  <video src="./public/memoreat-mobile-dash.mp4" width="24%" autoplay loop muted playsinline></video>
+  <video src="./public/memoreat-mobile-add.mp4" width="24%" autoplay loop muted playsinline></video>
+</p>
+
+## Build Rationale
+
+Memoreat was built not only as a functional calorie and meal tracker, but as a technical showcase to demonstrate:
+- **Unified Containerization**: Bundling both the Next.js application and the PostgreSQL database within a unified Docker setup.
+- **Optimized Builds**: Utilizing a multi-stage Dockerfile to minimize production image size and improve build performance.
+- **Automated CI/CD**: Leveraging GitHub Actions workflows to automatically build and publish Docker images to a container registry upon merging to the main branch.
+
 ## Features
 
 - **Meal Logging**: Record food name, calories, macros, and personal reflections.

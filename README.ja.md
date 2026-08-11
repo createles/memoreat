@@ -4,6 +4,29 @@
 
 Memoreatは、食事の記録、カロリー、栄養情報をトラッキングし、振り返りを通じてマインドフルな食事を促すコンテナ化された食事記録アプリケーションです。PostgreSQLデータベースと共にDockerを使用してパッケージ化されており、モダンなフルスタックアプリケーションのコンテナ化を実践しています。
 
+## ライブデモ
+
+[Railwayでのライブデモを見る](https://your-project-name.up.railway.app)
+
+### デスクトップ表示
+<p align="center">
+  <video src="./public/memoreat-dashboard.mp4" width="49%" autoplay loop muted playsinline></video>
+  <video src="./public/memoreat-add.mp4" width="49%" autoplay loop muted playsinline></video>
+</p>
+
+### モバイル表示
+<p align="center">
+  <video src="./public/memoreat-mobile-dash.mp4" width="24%" autoplay loop muted playsinline></video>
+  <video src="./public/memoreat-mobile-add.mp4" width="24%" autoplay loop muted playsinline></video>
+</p>
+
+## 開発の背景と目的
+
+Memoreatは、実用的なカロリー・食事トラッカーとしてだけでなく、以下の技術的なショーケースとして開発されました：
+- **統合されたコンテナ化**: Next.jsアプリケーションとPostgreSQLデータベースの両方を単一のDockerセットアップ内にバンドル。
+- **最適化されたビルド**: マルチステージのDockerfileを利用して、本番用イメージサイズを最小化し、ビルドパフォーマンスを向上。
+- **自動化されたCI/CD**: GitHub Actionsワークフローを活用し、mainブランチへのマージ時にDockerイメージを自動的にビルドしてコンテナレジストリに公開。
+
 ## 主な機能
 
 - **食事の記録**: 食べ物の名前、カロリー、マクロ栄養素、個人的な振り返りを記録します。
