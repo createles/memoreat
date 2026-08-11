@@ -2,8 +2,7 @@
 
 import { prisma } from "../lib/prisma";
 import { revalidatePath } from "next/cache";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { uploadImageToCloudinary } from "../lib/cloudinary";
 
 export async function getMeals() {
     try {
@@ -25,13 +24,11 @@ export async function createMeal(formData: FormData) {
     if (image && image.size > 0) {
         const buffer = Buffer.from(await image.arrayBuffer());
         const filename = `${Date.now()}-${image.name}`;
-        const filepath = path.join(process.cwd(), "public/uploads", filename);
-        await writeFile(filepath, buffer);
-        imageUrl = `/uploads/${filename}`;
+        imageUrl = await uploadImageToCloudinary(buffer, filename);
     }
 
     try {
-        await prisma.meal.create({
+        const newMeal =await prisma.meal.create({
             data: {
                 name: formData.get("name") as string,
                 calories: Number(formData.get("calories")),
@@ -46,6 +43,7 @@ export async function createMeal(formData: FormData) {
             include: { images: true }
         })
         revalidatePath("/");
+        return newMeal;
     } catch (error) {
         console.error("Error creating meal:", error);
         throw new Error("Failed to create meal");
@@ -53,6 +51,11 @@ export async function createMeal(formData: FormData) {
 }
 
 export async function deleteMeal(mealId: number) {
+    // Protect seed data from global deletion
+    if (mealId <= 8) {
+        return; // Do not delete seed meals;
+    }
+
     try {
         await prisma.meal.delete({
             where: { id: mealId }
@@ -65,6 +68,11 @@ export async function deleteMeal(mealId: number) {
 }
 
 export async function updateMeal(mealId: number, formData: FormData) {
+    // Protect seed data from global updates
+    if (mealId <= 8) {
+        return; // Do not update seed meals;
+    }
+    
     const image = formData.get("image") as File | null;
     let imageUrl = null;
 
@@ -72,9 +80,7 @@ export async function updateMeal(mealId: number, formData: FormData) {
     if (image && image.size > 0) {
         const buffer = Buffer.from(await image.arrayBuffer());
         const filename = `${Date.now()}-${image.name}`;
-        const filepath = path.join(process.cwd(), "public/uploads", filename);
-        await writeFile(filepath, buffer);
-        imageUrl = `/uploads/${filename}`;
+        imageUrl = await uploadImageToCloudinary(buffer, filename);
     }
 
     try {

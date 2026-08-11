@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createMeal, updateMeal } from "../actions/mealActions";
 import { Prisma } from "../generated/prisma/client";
 import { Camera, X, Image as ImageIcon } from "lucide-react";
+import { saveMealToLocal } from "../lib/localIndex";
 
 type MealWithImages = Prisma.MealGetPayload<{
     include: { images: true }
@@ -98,7 +99,30 @@ export default function MealForm({ mealToEdit, isOpenProp = false, onClose }: Me
                                 <X className="w-6 h-6" />
                             </button>
                             
-                            <form action={mealToEdit ? updateMeal.bind(null, mealToEdit.id) : createMeal} encType="multipart/form-data" className="relative flex flex-col items-center w-full min-h-0 shrink" onSubmit={() => { setIsOpen(false); setTimeout(() => { if(onClose) onClose(); setPreviewUrl(null); }, 400); }}>
+                            <form encType="multipart/form-data" className="relative flex flex-col items-center w-full min-h-0 shrink" onSubmit={async (e) => {
+                                // 1. Stop the browser from refreshing the page
+                                e.preventDefault();
+
+                                // 2. Grab the data from the form
+                                const formData = new FormData(e.currentTarget);
+
+                                // 3. Call our Server Actions manually and wait for them to finish
+                                if (mealToEdit) {
+                                    await updateMeal(mealToEdit.id, formData);
+                                } else {
+                                    const newMeal = await createMeal(formData);
+                                    if (newMeal) {
+                                        // 4. Save the ID to localStorage!
+                                        saveMealToLocal(newMeal.id);
+                                    }
+                                }
+
+                                // 5. Run your original animation and cleanup logic
+                                setIsOpen(false);
+                                setTimeout(() => {
+                                    if(onClose) onClose();
+                                    setPreviewUrl(null);
+                                }, 400);}}>
                                 <div className="text-center mb-2 sm:mb-6 w-full shrink-0">
                                     <h2 className="text-4xl sm:text-5xl font-caveat font-bold text-white drop-shadow-lg">{mealToEdit ? "Edit Memory" : "New Memory"}</h2>
                                 </div>

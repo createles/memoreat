@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { X, Edit2, Trash2 } from "lucide-react";
 import { deleteMeal } from "../actions/mealActions";
 import MealForm from "./MealForm";
+import { getMealIdsFromLocal, removeMealFromLocal } from "../lib/localIndex";
 
 type MealWithImages = Prisma.MealGetPayload<{
     include: { images: true }
@@ -20,19 +21,26 @@ export default function MealList({ meals }: MealListProps) {
     const [selectedMealId, setSelectedMealId] = useState<number | null>(null);
     const [mealToEdit, setMealToEdit] = useState<MealWithImages | null>(null);
     const [mealToDelete, setMealToDelete] = useState<number | null>(null);
+    const [displayMeals, setDisplayMeals] = useState<MealWithImages[]>([]); // State to hold the meals that are displayed based on local storage
+
+    useEffect(() => {
+        const myIds = getMealIdsFromLocal();
+        const myFilteredMeals = meals.filter(meal => myIds.includes(meal.id));
+        setDisplayMeals(myFilteredMeals);
+    }, [meals]);
 
     useEffect(() => {
         // Generate random rotations for each meal card
-        const randRotations = meals.map(() => Math.random() * 6 - 3); // -3 to 3 degrees
+        const randRotations = displayMeals.map(() => Math.random() * 6 - 3); // -3 to 3 degrees
         setRotations(randRotations);
-    }, [meals]);
+    }, [displayMeals]);
 
     return (
         <div className="w-full">
             <h2 className="text-4xl font-caveat font-bold mb-8 text-slate-800">Recent Meals</h2>
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
                 <AnimatePresence>
-                    {meals.map((meal, index) => {
+                    {displayMeals.map((meal, index) => {
                         const rotation = rotations.length > 0 ? rotations[index] : 0;
                         return (
                             <motion.li 
@@ -100,7 +108,7 @@ export default function MealList({ meals }: MealListProps) {
                         className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
                         onClick={() => setSelectedMealId(null)}
                     >
-                        {meals.filter(m => m.id === selectedMealId).map(meal => (
+                        {displayMeals.filter(m => m.id === selectedMealId).map(meal => (
                             <motion.div 
                                 layoutId={`meal-card-${meal.id}`}
                                 key={`expanded-${meal.id}`}
@@ -156,14 +164,16 @@ export default function MealList({ meals }: MealListProps) {
                                 </div>
 
                                 {/* Edit Post-it */}
-                                <motion.div 
-                                    onClick={() => setMealToEdit(meal)}
-                                    whileHover={{ y: -2, scale: 1.05 }}
-                                    className="absolute -bottom-8 right-8 bg-yellow-200 p-4 shadow-lg border border-black/5 flex items-center justify-center rotate-3 cursor-pointer group"
-                                >
-                                    <Edit2 className="w-6 h-6 text-slate-700 group-hover:text-slate-900" />
-                                    <span className="ml-2 font-caveat text-xl font-bold text-slate-700 group-hover:text-slate-900">Edit</span>
-                                </motion.div>
+                                    {meal.id > 8 && (
+                                        <motion.div
+                                            onClick={() => setMealToEdit(meal)}
+                                            whileHover={{ y: -2, scale: 1.05 }}
+                                            className="absolute -bottom-8 right-8 bg-yellow-200 p-4 shadow-lg border border-black/5 flex items-center justify-center rotate-3 cursor-pointer group"
+                                        >
+                                            <Edit2 className="w-6 h-6 text-slate-700 group-hover:text-slate-900" />
+                                            <span className="ml-2 font-caveat text-xl font-bold text-slate-700 group-hover:text-slate-900">Edit</span>
+                                        </motion.div>
+                                    )}
 
                                 {/* Delete Post-it */}
                                 <motion.div 
@@ -220,7 +230,11 @@ export default function MealList({ meals }: MealListProps) {
                                 </button>
                                 <button 
                                     onClick={() => {
+                                        // Always remove from local view first
+                                        removeMealFromLocal(mealToDelete);
+                                        // Server will ignore if meal.id in seed data range (1-8)
                                         deleteMeal(mealToDelete);
+                                        setDisplayMeals(prev => prev.filter(meal => meal.id !== mealToDelete));
                                         setMealToDelete(null);
                                         setSelectedMealId(null);
                                     }}
